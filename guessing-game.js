@@ -6,74 +6,56 @@ const rl = readline.createInterface({
 });
 
 
-
-// rl.question('What do you think of Node.js? ', (answer) => {
-//   // TODO: Log the answer in a database
-//   console.log(`Thank you for your valuable feedback: ${answer}`);
-
-//   rl.close();
-// });
-
-
-
-
-/*
-//checkGuess function
-secretNumber
-askGuess
-question  module
-
-
-checkGuess
-askGuess
-
-phase 1
-take in Input
-
-
-Enter a max number: *20*
-Enter a min number: *11*
-I'm thinking of a number between 11 and 20...
-Enter a guess: *15*
-Too high.
-Enter a guess: *11*
-Too low.
-Enter a guess: *13*
-Too high.
-Enter a guess: *12*
-Correct!
-YOU WON.
-
-*/
-
-//input from user = min and max
-
-
 let secretNumber = 10;
 
 const checkGuess = (num) => {
   if (num > secretNumber) {
-    rl.question('too high')
+    console.log('too high')
     return false;
   } else if (num < secretNumber) {
-    rl.question('too low')
+    console.log('too low')
     return false;
-  } else {
+  } else if (num == secretNumber) {
+    console.log('You win!')
     return true;
   }
 }
 
 const askGuess = () => {
-  rl.question('What/s your number?', (answer) => {
+  rl.question('Enter a guess:', (answer) => {
 
-    if (checkGuess(answer)) {
-      rl.question('Correct!')
-      rl.question('YOU WON.')
-      rl.close();
+    if (!parseInt(answer)) {
+      console.log(`${answer} is not a valid number`)
+      askGuess();
     }
-  }
+    if (checkGuess(answer)) {
+      rl.close();
+    } else {
+      askGuess();
+    }
+  })
 }
 
 
 
-askGuess();
+const askNum = () => {
+  const askMin = rl.question(`Enter a min number: `, (min) => {
+
+    const askMax = rl.question(`Enter a max number: `, (max) => {
+
+      console.log(`I'm thinking of a number between ${min} and ${max}...`);
+
+      max = parseInt(max);
+      min = parseInt(min);
+
+      secretNumber = Math.round(Math.random() * (max - min)) + min;
+      console.log(`secretNum: ${secretNumber}`);
+
+      askGuess();
+    })
+  })
+}
+
+
+
+askNum();
